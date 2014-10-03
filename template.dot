@@ -1,0 +1,80 @@
+{{##def.appsView:
+  {{~ it.docs :app}}
+    {{#def.appView:app}}
+  {{~}}
+#}}
+
+{{##def.appView:app:
+  <div class="app">
+    <div class="app-path">{{=app.path}}</div>
+    {{#def.routesView:app.routes}}
+  </div>
+#}}
+
+{{##def.routesView:rts:
+  {{? rts}}
+    <div class="routes">
+      {{~ rts :route}}
+        {{#def.routeView:route}}
+      {{~}}
+    </div>
+  {{?}}
+#}}
+
+{{##def.routeView:route:
+  <div class="route">
+    <div class="route-header">
+      <div class="route-path">{{=route.path}}</div>
+      {{#def.methodsView:route.method}}
+    </div>
+    {{? route.description}}
+      <div class="desc">{{=route.description}}</div>
+    {{?}}
+    {{#def.validateView:route.validate}}
+  </div>
+#}}
+
+{{##def.methodsView:mthds:
+  {{? mthds}}
+    <div class="methods">
+      {{~ mthds :method}}
+        <span class="method">{{=method}}</span>
+      {{~}}
+    </div>
+  {{?}}
+#}}
+
+{{##def.validateView:validate:
+  {{? validate}}
+    <div class="val">
+      <pre>{{=JSON.stringify(validate, undefined, 2)}}</pre>
+    </div>
+  {{?}}
+#}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style>
+body {font-family: sans-serif;}
+.app {display: flex; width: 100%; min-width: 1000px;}
+.app-path, .route-path {flex: 0 1 auto; font-weight: bold;}
+.app-path {margin-top: 1em; line-height: 1.5em;}
+.routes {flex: 4 1 auto;}
+.route {margin-top: 1em;}
+.route-header {display: flex; line-height: 1.5em;}
+.method {margin-left: 1em; padding: 0 0.5em; color: #555; background-color: #eee;}
+.desc {flex: 3 1 auto;}
+</style>
+<title>
+{{? it.title}}
+  {{=it.title}}
+{{??}}
+  Route Documentation
+{{?}}
+</title>
+</head>
+<body>
+{{#def.appsView}}
+</body>
+</html>

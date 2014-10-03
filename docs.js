@@ -1,0 +1,170 @@
+'use strict';
+
+var fs = require('fs');
+var join = require('path').join;
+var dot = require('dot');
+var koa = require('koa');
+var router = require('koa-joi-router');
+
+var docs = module.exports = koa();
+var r = router();
+
+// holds the routes as they are added by koa-resourcer
+var routes = [];
+
+// expose routes to docs generator
+docs.routes = r.routes;
+
+var templatePath = join(__dirname, 'template.dot');
+var template = loadTemplate(templatePath);
+
+// holds the routes description object
+var objCache = null;
+
+// holds the compiled html routes description string data
+var htmlCache = null;
+
+/**
+ * API documentation in JSON format
+ */
+
+r.get('/json'
+, {
+    description: 'API documentation in JSON format.'
+  }
+, function* () {
+    if (objCache) {
+      this.body = objCache;
+      return;
+    }
+
+    this.body = objCache = { docs: describeRoutes(routes) };
+  }
+);
+
+/**
+ * API documentation in human-readable HTML format
+ */
+
+r.get('/'
+, {
+    description: 'API documentation in human-readable HTML format.'
+  }
+, function* () {
+    if (htmlCache) {
+      this.body = htmlCache;
+      return;
+    }
+
+    if (objCache) {
+      this.body = htmlCache = template(objCache);
+      return;
+    }
+
+    objCache = { docs: describeRoutes(routes) };
+    this.body = htmlCache = template(objCache);
+  }
+);
+
+docs.use(r.middleware());
+
+/**
+ * Handles the route object passed to the resourcer callback
+ * @api public
+ */
+
+docs.addRoute = function addRoute(o) {
+  routes.push(o)
+};
+
+/**
+ * Clear documentation cache
+ * @api public
+ */
+
+docs.clearCache = function clearCache() {
+  htmlCache = null;
+  objCache = null;
+};
+
+/**
+ * Load the documentation template.
+ * @api private
+ */
+
+function loadTemplate(path) {
+  try {
+    return dot.compile(fs.readFileSync(path));
+  } catch (e) {
+    // Ignoring this line for code coverage until custom templates are supported.
+    /* istanbul ignore next */
+    return dot.compile("Failed to load documentation template from path: " + path);
+  }
+}
+
+/**
+ * Produce the routes description object.
+ * @api private
+ */
+
+function describeRoutes(routes) {
+  return routes.filter(function (route) {
+    return isObject(route.resource.routes);
+  }).map(function (route) {
+    return {
+      path: route.path
+    , routes: route.resource.routes.filter(function (route) {
+        return !route.hide;
+      }).map(describeRoute)
+    };
+  });
+}
+
+/**
+ * Produces a human readable description of the route.
+ * @api private
+ */
+
+function describeRoute(route) {
+  var ret = {};
+
+  Object.keys(route).forEach(function(key){
+    if ('handler' == key) return;
+    if ('validate' == key) return;
+    ret[key] = route[key];
+  });
+
+  if (route.validate) {
+    // this is the validation object being used by the routes themselves,
+    // do not change this object.
+    ret.validate = describeObject(route.validate);
+  }
+
+  return ret;
+}
+
+/**
+ * Produces a human readable description of the route validators.
+ * @api private
+ */
+
+function describeObject(o) {
+  if ('function' == typeof o.describe) return o.describe();
+
+  var ret = {};
+  if (!isObject(o)) return o;
+
+  Object.keys(o).forEach(function(key) {
+    ret[key] = describeObject(o[key]);
+  });
+
+  return ret;
+}
+
+/**
+ * @api private
+ */
+
+function isObject(o) {
+  return 'object' == typeof o && null !== o;
+}

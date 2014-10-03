@@ -1,0 +1,7 @@
+*.sw*
+node_modules/
+.DS_Store
+coverage
+test/
+atlassian-ide-plugin.xml
+.idea
