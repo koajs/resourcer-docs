@@ -1,4 +1,3 @@
-
 var koa = require('koa');
 var http = require('http');
 var assert = require('assert');
@@ -101,7 +100,7 @@ describe('koa-resourcer-docs', function() {
       it('html output should use the object cache if it is generated', function* () {
         // This test is for 100% code coverage
         docs.clearCache();
-        yield test(app).get('/docs/json').expect(200).end();
+        yield test(app).get('/docs/index.json').expect(200).end();
         yield test(app).get('/docs').expect(200).end();
       });
 
@@ -111,7 +110,7 @@ describe('koa-resourcer-docs', function() {
     });
   });
 
-  describe('/docs/json', function () {
+  describe('/docs/index.json', function () {
     before(function* () {
       cleanRoutes(apps);
       docs.clearCache();
@@ -121,7 +120,7 @@ describe('koa-resourcer-docs', function() {
       var docsObj;
       it('responds with an object containing a docs property', function* () {
         docs.clearCache();
-        var res = yield test(app).get('/docs/json').expect(200).end();
+        var res = yield test(app).get('/docs/index.json').expect(200).end();
 
         assert(Array.isArray(res.body.docs));
         docsObj = res.body.docs;
@@ -131,7 +130,7 @@ describe('koa-resourcer-docs', function() {
         // Modify the source routes; if caching is being used the output should be the same
         polluteRoutes(apps);
 
-        var res = yield test(app).get('/docs/json').expect(200).end();
+        var res = yield test(app).get('/docs/index.json').expect(200).end();
 
         assert(Array.isArray(res.body.docs));
         assert.deepEqual(docsObj, res.body.docs);

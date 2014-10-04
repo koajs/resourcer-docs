@@ -28,7 +28,7 @@ var htmlCache = null;
  * API documentation in JSON format
  */
 
-r.get('/json'
+r.get('/index.json'
 , {
     description: 'API documentation in JSON format.'
   }
