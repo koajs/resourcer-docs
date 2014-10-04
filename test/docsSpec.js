@@ -22,20 +22,20 @@ describe('koa-resourcer-docs', function() {
     ++mounted;
   });
 
-  function test(app){
+  function test(app) {
     return request(http.createServer(app.callback()))
   }
 
-  function distortRoutes(apps) {
+  function polluteRoutes(apps, junk) {
     var path;
     for (path in apps) {
       if (apps[path].path !== '/docs') {
-        apps[path].path = path + 'derb';
+        apps[path].path = path + (junk || "derb");
       }
     }
   }
 
-  function clarifyRoutes(apps) {
+  function cleanRoutes(apps) {
     var path;
     for (path in apps) {
       if (apps[path].path !== '/docs') {
@@ -45,13 +45,33 @@ describe('koa-resourcer-docs', function() {
   }
 
   describe('uses resourcer apps', function () {
-    it('that are mounted as expected', function (done) {
+    it('that are mounted as expected', function* () {
       assert.equal(5, mounted);
-      done();
+    });
+  });
+
+  describe('route pollute / clean tools', function () {
+    var junk = 'blah!';
+    it('should distort the output', function* () {
+      polluteRoutes(apps, junk);
+      var res = yield test(app).get('/docs').expect(200).end();
+      assert(res.text.indexOf(junk) >= 0);
+    });
+
+    it('should clean the output', function* () {
+      cleanRoutes(apps);
+      docs.clearCache();
+      var res = yield test(app).get('/docs').expect(200).end();
+      assert(res.text.indexOf(junk) === -1);
     });
   });
 
   describe('/docs', function () {
+    before(function* () {
+      cleanRoutes(apps);
+      docs.clearCache();
+    });
+
     describe('GET', function () {
       var html;
       it('responds with HTML text', function* () {
@@ -64,8 +84,8 @@ describe('koa-resourcer-docs', function() {
       });
 
       it('responds with the same result from cache', function* () {
-        // Modify the source routes (mess with a path that isn't being used);
-        distortRoutes(apps);
+        // Modify the source routes; if caching is being used the output should be the same
+        polluteRoutes(apps);
 
         var res = yield test(app).get('/docs').expect(200).end();
 
@@ -75,10 +95,11 @@ describe('koa-resourcer-docs', function() {
         assert.equal(html, res.text);
 
         // Undo modifications
-        clarifyRoutes(apps);
+        cleanRoutes(apps);
       });
 
-      it('should use the object cache if it is generated', function* () {
+      it('html output should use the object cache if it is generated', function* () {
+        // This test is for 100% code coverage
         docs.clearCache();
         yield test(app).get('/docs/json').expect(200).end();
         yield test(app).get('/docs').expect(200).end();
@@ -91,6 +112,11 @@ describe('koa-resourcer-docs', function() {
   });
 
   describe('/docs/json', function () {
+    before(function* () {
+      cleanRoutes(apps);
+      docs.clearCache();
+    });
+
     describe('GET', function () {
       var docsObj;
       it('responds with an object containing a docs property', function* () {
@@ -102,8 +128,8 @@ describe('koa-resourcer-docs', function() {
       });
 
       it('responds with the same result from cache', function* () {
-        // Modify the source routes (mess with a path that isn't being used);
-        distortRoutes(apps);
+        // Modify the source routes; if caching is being used the output should be the same
+        polluteRoutes(apps);
 
         var res = yield test(app).get('/docs/json').expect(200).end();
 
@@ -111,7 +137,7 @@ describe('koa-resourcer-docs', function() {
         assert.deepEqual(docsObj, res.body.docs);
 
         // Undo modifications
-        clarifyRoutes(apps);
+        cleanRoutes(apps);
       });
 
       it('has a docs property with valid paths and routes', function* () {
