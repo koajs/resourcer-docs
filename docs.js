@@ -9,6 +9,9 @@ var router = require('koa-joi-router');
 var docs = module.exports = koa();
 var r = router();
 
+// If defined, custom middleware called by interceptRequest()
+var requestHandler;
+
 // holds the routes as they are added by koa-resourcer
 var routes = [];
 
@@ -32,6 +35,7 @@ r.get('/index.json'
 , {
     description: 'API documentation in JSON format.'
   }
+, interceptRequest
 , function* () {
     if (objCache) {
       this.body = objCache;
@@ -50,6 +54,7 @@ r.get('/'
 , {
     description: 'API documentation in human-readable HTML format.'
   }
+, interceptRequest
 , function* () {
     if (htmlCache) {
       this.body = htmlCache;
@@ -86,6 +91,28 @@ docs.clearCache = function clearCache() {
   htmlCache = null;
   objCache = null;
 };
+
+/**
+ * Override request handling middleware
+ * @api public
+ */
+
+docs.useRequestHandler = function useRequestHandler(handler) {
+  requestHandler = handler;
+};
+
+/**
+ * Middleware to intercept the request and allow a custom handler.
+ * @api private
+ */
+
+function* interceptRequest(next) {
+  if (typeof requestHandler === 'function') {
+    return yield requestHandler.call(this, next);
+  } else {
+    return yield next;
+  }
+}
 
 /**
  * Load the documentation template.

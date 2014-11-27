@@ -61,6 +61,19 @@ router.get('/secretRoute', {description: 'Nobody here but us chickens.', hide: t
 });
 ```
 
+Add middleware to intercept requests before routing to docs:
+```js
+var docs = require('koa-resourcer-docs');
+
+// Respond with 404 if not in a development environment
+docs.useRequestHandler(function* (next) {
+  if (process.env.NODE_ENV === 'development') {
+    return yield next;
+  }
+  this.throw(404);
+});
+```
+
 ## Installation
 ```
 npm install koa-resourcer-docs --save

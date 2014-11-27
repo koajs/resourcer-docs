@@ -118,8 +118,18 @@ describe('koa-resourcer-docs', function() {
 
     describe('GET', function () {
       var docsObj;
+      it('should call the optional request handler middleware if set', function* () {
+        var requestHandled = false;
+        docs.useRequestHandler(function* (next) {
+          requestHandled = true;
+          return yield next;
+        });
+        yield test(app).get('/docs').expect(200).end();
+        assert(requestHandled, "Request handler not called.");
+        // Reset the request handler to default behavior
+        docs.useRequestHandler();
+      });
       it('responds with an object containing a docs property', function* () {
-        docs.clearCache();
         var res = yield test(app).get('/docs/index.json').expect(200).end();
 
         assert(Array.isArray(res.body.docs));
