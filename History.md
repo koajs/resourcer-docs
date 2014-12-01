@@ -1,3 +1,9 @@
+0.3.0 / 2014-12-01
+==================
+ * release 0.3.0
+ * Add useRequestHandler method that allows docs to inject middleware before
+   documentation requests.
+
 0.2.0 / 2014-10-03
 ==================
 
