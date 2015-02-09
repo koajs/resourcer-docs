@@ -14,7 +14,7 @@ var resource = require('koa-resourcer');
 var docs = require('koa-resourcer-docs');
 
 var app = koa();
-resource(app, join(__dirname, 'resources'), docs.addResource);
+resource(app, join(__dirname, 'resources'), docs.addRoute);
 app.listen();
 ```
 
