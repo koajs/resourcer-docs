@@ -1,7 +1,6 @@
 {
   "name": "koa-resourcer-docs",
   "version": "0.3.0",
-  "private": true,
   "description": "Simple route documentation for koa-resourcer.",
   "main": "docs.js",
   "license": "MIT",
