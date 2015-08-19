@@ -9,12 +9,15 @@ app.routes = r.routes;
 
 r.get('/visible'
   , {
-    description: 'Here are my papers.',
-    validate: {
-      describe: function () {
-        return "Papers";
+      description: 'Overridden by superior papers.'
+    , meta: {
+        description: 'Here are my commanding papers.'
       }
-    }
+    , validate: {
+        describe: function () {
+          return "Papers";
+        }
+      }
   }
   , function* () {
     this.body = 'Not a care in the world';

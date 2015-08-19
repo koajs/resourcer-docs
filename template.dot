@@ -27,8 +27,8 @@
       <div class="route-path">{{=route.path}}</div>
       {{#def.methodsView:route.method}}
     </div>
-    {{? route.description}}
-      <div class="desc">{{=route.description}}</div>
+    {{? ((route.meta && route.meta.description) || route.description) }}
+      <div class="desc">{{=((route.meta && route.meta.description) || route.description)}}</div>
     {{?}}
     {{#def.validateView:route.validate}}
   </div>

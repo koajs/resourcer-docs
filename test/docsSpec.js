@@ -107,6 +107,11 @@ describe('koa-resourcer-docs', function() {
       it('should not show hidden apps/routes in the response', function *() {
         assert(html.indexOf('/hidden') === -1);
       });
+
+      it('should prefer description from meta obj', function *() {
+        assert(html.indexOf('Overridden') === -1);
+        assert(html.indexOf('commanding') > 0);
+      });
     });
   });
 
