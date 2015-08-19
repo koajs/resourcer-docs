@@ -141,7 +141,8 @@ function describeRoutes(routes) {
     return {
       path: route.path
     , routes: route.resource.routes.filter(function (route) {
-        return !route.hide;
+        // Prefer using route.meta.hide over route.hide
+        return !((route.meta && route.meta.hide) || route.hide);
       }).map(describeRoute)
     };
   });

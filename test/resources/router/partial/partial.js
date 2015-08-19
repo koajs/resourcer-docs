@@ -7,30 +7,44 @@ var r = router();
 // Expose routes to docs generator
 app.routes = r.routes;
 
-r.get('/visible'
-  , {
-      description: 'Overridden by superior papers.'
-    , meta: {
-        description: 'Here are my commanding papers.'
+r.get('/visible',
+  {
+    description: 'Overridden by superior papers.'
+  , meta: {
+      description: 'Here are my commanding papers.'
+    }
+  , validate: {
+      describe: function () {
+        return "Papers";
       }
-    , validate: {
-        describe: function () {
-          return "Papers";
-        }
-      }
+    }
   }
   , function* () {
-    this.body = 'Not a care in the world';
+      this.body = 'Not a care in the world';
+    }
+);
+
+r.get('/hidden',
+  {
+    meta: {
+      description: "You don't know me"
+    , hide: true
+    }
+  }
+, function* () {
+    this.body = 'Potato';
   }
 );
 
-r.get('/hidden'
-  , {
-    description: 'You don\'t know me',
+r.get('/hiddentoo',
+  {
     hide: true
+  , meta: {
+      description: "You also don't know me"
+    }
   }
-  , function* () {
-    this.body = 'Potato';
+, function* () {
+    this.body = 'Mashed potato';
   }
 );
 
