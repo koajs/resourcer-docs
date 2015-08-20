@@ -1,6 +1,5 @@
-
 test: lint
-	@./node_modules/.bin/mocha test/*Spec.js
+	@NODE_ENV=test ./node_modules/.bin/mocha $(MOCHA_OPTS) test/*Spec.js
 
 lint:
 	@ find . -name "*.js" \
@@ -9,7 +8,7 @@ lint:
 		xargs -0 ./node_modules/eslint/bin/eslint.js
 
 test-cov: lint
-	@NODE_ENV=test node \
+	@NODE_ENV=test node $(MOCHA_OPTS) \
 		node_modules/.bin/istanbul cover \
 		./node_modules/.bin/_mocha \
 		-- -u exports \
@@ -18,4 +17,12 @@ test-cov: lint
 open-cov:
 	open coverage/lcov-report/index.html
 
-.PHONY: test test-cov open-cov
+test-travis: lint
+	@NODE_ENV=test node $(MOCHA_OPTS) \
+		./node_modules/.bin/istanbul cover \
+		./node_modules/.bin/_mocha \
+		--report lcovonly \
+		-- -u exports \
+		--bail
+
+.PHONY: test lint test-cov open-cov test-travis
