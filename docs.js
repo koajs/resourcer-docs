@@ -31,31 +31,32 @@ var htmlCache = null;
  * API documentation in JSON format
  */
 
-r.get('/index.json'
-, {
+r.get('/index.json',
+  {
     description: 'API documentation in JSON format.'
-  }
-, interceptRequest
-, function* () {
+  },
+  interceptRequest,
+  function*() {
     if (objCache) {
       this.body = objCache;
       return;
     }
 
-    this.body = objCache = { docs: describeRoutes(routes) };
-  }
-);
+    this.body = objCache = {
+      docs: describeRoutes(routes)
+    };
+  });
 
 /**
  * API documentation in human-readable HTML format
  */
 
-r.get('/'
-, {
+r.get('/',
+  {
     description: 'API documentation in human-readable HTML format.'
-  }
-, interceptRequest
-, function* () {
+  },
+  interceptRequest,
+  function* () {
     if (htmlCache) {
       this.body = htmlCache;
       return;
@@ -66,7 +67,9 @@ r.get('/'
       return;
     }
 
-    objCache = { docs: describeRoutes(routes) };
+    objCache = {
+      docs: describeRoutes(routes)
+    };
     this.body = htmlCache = template(objCache);
   }
 );
@@ -79,7 +82,7 @@ docs.use(r.middleware());
  */
 
 docs.addRoute = function addRoute(o) {
-  routes.push(o)
+  routes.push(o);
 };
 
 /**
@@ -125,7 +128,7 @@ function loadTemplate(path) {
   } catch (e) {
     // Ignoring this line for code coverage until custom templates are supported.
     /* istanbul ignore next */
-    return dot.compile("Failed to load documentation template from path: " + path);
+    return dot.compile('Failed to load documentation template from path: ' + path);
   }
 }
 
@@ -135,12 +138,11 @@ function loadTemplate(path) {
  */
 
 function describeRoutes(routes) {
-  return routes.filter(function (route) {
+  return routes.filter(function(route) {
     return isObject(route.resource.routes);
-  }).map(function (route) {
+  }).map(function(route) {
     return {
-      path: route.path
-    , routes: route.resource.routes.filter(function (route) {
+      path: route.path, routes: route.resource.routes.filter(function(route) {
         // Prefer using route.meta.hide over route.hide
         return !((route.meta && route.meta.hide) || route.hide);
       }).map(describeRoute)
@@ -156,9 +158,9 @@ function describeRoutes(routes) {
 function describeRoute(route) {
   var ret = {};
 
-  Object.keys(route).forEach(function(key){
-    if ('handler' == key) return;
-    if ('validate' == key) return;
+  Object.keys(route).forEach(function(key) {
+    if (key === 'handler') return;
+    if (key === 'validate') return;
     ret[key] = route[key];
   });
 
@@ -177,7 +179,7 @@ function describeRoute(route) {
  */
 
 function describeObject(o) {
-  if ('function' == typeof o.describe) return o.describe();
+  if (typeof o.describe === 'function') return o.describe();
 
   var ret = {};
   if (!isObject(o)) return o;
@@ -194,5 +196,5 @@ function describeObject(o) {
  */
 
 function isObject(o) {
-  return 'object' == typeof o && null !== o;
+  return typeof o === 'object' && o !== null;
 }

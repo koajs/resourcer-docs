@@ -1,3 +1,5 @@
+'use strict';
+
 var koa = require('koa');
 var http = require('http');
 var assert = require('assert');
@@ -22,14 +24,14 @@ describe('koa-resourcer-docs', function() {
   });
 
   function test(app) {
-    return request(http.createServer(app.callback()))
+    return request(http.createServer(app.callback()));
   }
 
   function polluteRoutes(apps, junk) {
     var path;
     for (path in apps) {
       if (apps[path].path !== '/docs') {
-        apps[path].path = path + (junk || "derb");
+        apps[path].path = path + (junk || 'derb');
       }
     }
   }
@@ -43,13 +45,13 @@ describe('koa-resourcer-docs', function() {
     }
   }
 
-  describe('uses resourcer apps', function () {
+  describe('uses resourcer apps', function() {
     it('that are mounted as expected', function* () {
       assert.equal(5, mounted);
     });
   });
 
-  describe('route pollute / clean tools', function () {
+  describe('route pollute / clean tools', function() {
     var junk = 'blah!';
     it('should distort the output', function* () {
       polluteRoutes(apps, junk);
@@ -65,13 +67,13 @@ describe('koa-resourcer-docs', function() {
     });
   });
 
-  describe('/docs', function () {
+  describe('/docs', function() {
     before(function* () {
       cleanRoutes(apps);
       docs.clearCache();
     });
 
-    describe('GET', function () {
+    describe('GET', function() {
       var html;
       it('responds with HTML text', function* () {
         var res = yield test(app).get('/docs').expect(200).end();
@@ -83,7 +85,8 @@ describe('koa-resourcer-docs', function() {
       });
 
       it('responds with the same result from cache', function* () {
-        // Modify the source routes; if caching is being used the output should be the same
+        // Modify the source routes; if caching is being used the output should be
+        // the same
         polluteRoutes(apps);
 
         var res = yield test(app).get('/docs').expect(200).end();
@@ -104,24 +107,24 @@ describe('koa-resourcer-docs', function() {
         yield test(app).get('/docs').expect(200).end();
       });
 
-      it('should not show hidden apps/routes in the response', function *() {
+      it('should not show hidden apps/routes in the response', function* () {
         assert(html.indexOf('/hidden') === -1);
       });
 
-      it('should prefer description from meta obj', function *() {
+      it('should prefer description from meta obj', function* () {
         assert(html.indexOf('Overridden') === -1);
         assert(html.indexOf('commanding') > 0);
       });
     });
   });
 
-  describe('/docs/index.json', function () {
+  describe('/docs/index.json', function() {
     before(function* () {
       cleanRoutes(apps);
       docs.clearCache();
     });
 
-    describe('GET', function () {
+    describe('GET', function() {
       var docsObj;
       it('should call the optional request handler middleware if set', function* () {
         var requestHandled = false;
@@ -130,7 +133,7 @@ describe('koa-resourcer-docs', function() {
           return yield next;
         });
         yield test(app).get('/docs').expect(200).end();
-        assert(requestHandled, "Request handler not called.");
+        assert(requestHandled, 'Request handler not called.');
         // Reset the request handler to default behavior
         docs.useRequestHandler();
       });
@@ -142,7 +145,8 @@ describe('koa-resourcer-docs', function() {
       });
 
       it('responds with the same result from cache', function* () {
-        // Modify the source routes; if caching is being used the output should be the same
+        // Modify the source routes; if caching is being used the output should be
+        // the same
         polluteRoutes(apps);
 
         var res = yield test(app).get('/docs/index.json').expect(200).end();
@@ -162,10 +166,10 @@ describe('koa-resourcer-docs', function() {
       });
 
       it('hides apps that don\'t have exposed routes', function* () {
-        var docAppPaths = docsObj.map(function (docApp) {
+        var docAppPaths = docsObj.map(function(docApp) {
           return docApp.path;
         });
-        Object.keys(apps).forEach(function (path) {
+        Object.keys(apps).forEach(function(path) {
           if (path.indexOf('hidden') >= 0) {
             assert(docAppPaths.indexOf(path) === -1);
           }
@@ -173,8 +177,8 @@ describe('koa-resourcer-docs', function() {
       });
 
       it('hides routes with hide: true in the configuration', function* () {
-        docsObj.forEach(function (d) {
-          d.routes.forEach(function (r) {
+        docsObj.forEach(function(d) {
+          d.routes.forEach(function(r) {
             assert(r.path.indexOf('/hidden') === -1);
           });
         });

@@ -1,3 +1,4 @@
+'use strict';
 
 var koa = require('koa');
 var app = koa();
@@ -9,41 +10,41 @@ app.routes = r.routes;
 
 r.get('/visible',
   {
-    description: 'Overridden by superior papers.'
-  , meta: {
+    description: 'Overridden by superior papers.',
+    meta: {
       description: 'Here are my commanding papers.'
-    }
-  , validate: {
-      describe: function () {
-        return "Papers";
+    },
+    validate: {
+      describe: function() {
+        return 'Papers';
       }
     }
+  },
+  function* () {
+    this.body = 'Not a care in the world';
   }
-  , function* () {
-      this.body = 'Not a care in the world';
-    }
 );
 
 r.get('/hidden',
   {
     meta: {
-      description: "You don't know me"
-    , hide: true
+      description: "You don't know me",
+      hide: true
     }
-  }
-, function* () {
+  },
+  function* () {
     this.body = 'Potato';
   }
 );
 
 r.get('/hiddentoo',
   {
-    hide: true
-  , meta: {
+    hide: true,
+    meta: {
       description: "You also don't know me"
     }
-  }
-, function* () {
+  },
+  function* () {
     this.body = 'Mashed potato';
   }
 );

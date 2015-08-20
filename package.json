@@ -27,6 +27,9 @@
   },
   "dependencies": {
     "dot": "1.0.3",
+    "eslint": "^1.2.0",
+    "eslint-config-pebble": "^1.2.0",
+    "eslint-plugin-standard": "^1.2.0",
     "koa": "^0.21.0",
     "koa-joi-router": "^2.0.0"
   },
@@ -41,5 +44,13 @@
   "scripts": {
     "test": "make test",
     "test-cov": "make test-cov"
+  },
+  "eslintConfig": {
+    "extends": [
+      "pebble"
+    ],
+    "env": {
+      "node": true
+    }
   }
 }

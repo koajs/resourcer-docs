@@ -1,14 +1,15 @@
+'use strict';
 
 var koa = require('koa');
 var app = koa();
 var router = require('koa-joi-router');
 var r = router();
 
-r.get('/'
-  , {
+r.get('/',
+  {
     description: 'No one will be able to see this.'
-  }
-  , function* () {
+  },
+  function* () {
     this.body = 'Potato';
   }
 );

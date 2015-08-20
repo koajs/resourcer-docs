@@ -1,3 +1,4 @@
+'use strict';
 
 var koa = require('koa');
 var app = koa();
@@ -7,14 +8,14 @@ var r = router();
 // Expose routes to docs generator
 app.routes = r.routes;
 
-r.get('/'
-  , {
-      description: 'Freedom!'
-    , validate: {
-        someKey: 'someValue'
-      }
-  }
-  , function* () {
+r.get('/',
+  {
+    description: 'Freedom!',
+    validate: {
+      someKey: 'someValue'
+    }
+  },
+  function* () {
     this.body = 'Hellloooooo world, look at me!';
   }
 );
