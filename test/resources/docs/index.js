@@ -1,1 +1,3 @@
-module.exports = require("../../../docs");
+'use strict';
+
+module.exports = require('../../../docs');

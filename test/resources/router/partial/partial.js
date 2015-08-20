@@ -1,3 +1,4 @@
+'use strict';
 
 var koa = require('koa');
 var app = koa();
@@ -7,27 +8,44 @@ var r = router();
 // Expose routes to docs generator
 app.routes = r.routes;
 
-r.get('/visible'
-  , {
-    description: 'Here are my papers.',
+r.get('/visible',
+  {
+    description: 'Overridden by superior papers.',
+    meta: {
+      description: 'Here are my commanding papers.'
+    },
     validate: {
-      describe: function () {
-        return "Papers";
+      describe: function() {
+        return 'Papers';
       }
     }
-  }
-  , function* () {
+  },
+  function* () {
     this.body = 'Not a care in the world';
   }
 );
 
-r.get('/hidden'
-  , {
-    description: 'You don\'t know me',
-    hide: true
-  }
-  , function* () {
+r.get('/hidden',
+  {
+    meta: {
+      description: "You don't know me",
+      hide: true
+    }
+  },
+  function* () {
     this.body = 'Potato';
+  }
+);
+
+r.get('/hiddentoo',
+  {
+    hide: true,
+    meta: {
+      description: "You also don't know me"
+    }
+  },
+  function* () {
+    this.body = 'Mashed potato';
   }
 );
 

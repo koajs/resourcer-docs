@@ -1,4 +1,3 @@
-/* jshint camelcase:false */
 'use strict';
 
 // patch mocha to accept generators
