@@ -74,7 +74,7 @@ docs.useRequestHandler(function* (next) {
 });
 ```
 
-For backwards compatibility "hide" and "description" on the koa-joi-router configuration object are still supported but no longer recommended since they pollute the namespace of the configuration.
+For backwards compatibility "hide" and "description" on the koa-joi-router configuration object are still supported but **no longer recommended** since they pollute the namespace of the configuration.
 
 ## Installation
 ```
