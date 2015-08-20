@@ -1,5 +1,16 @@
+0.4.0 / 2015-08-19
+==================
+
+ * Add travis coverage
+ * Add eslint configuration and formatting
+ * Support hide: true flag in meta object
+ * Bump dependencies and update Makefile
+ * Prefer meta.description in template
+ * open sourced
+
 0.3.0 / 2014-12-01
 ==================
+
  * release 0.3.0
  * Add useRequestHandler method that allows docs to inject middleware before
    documentation requests.
