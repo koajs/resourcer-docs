@@ -37,7 +37,7 @@ app.use(router.middleware());
 ## Configuration
 Add a description to the route config:
 ```js
-router.get('/', {description: 'Home page'}, function* () {
+router.get('/', {meta: {description: 'Home page'}}, function* () {
   this.body = "Home page under construction since 2009";
 });
 ```
@@ -51,12 +51,12 @@ Hide a resource by not exposing routes:
 Hide individual routes in a resource app from documentation by adding `hide: true` to route metadata:
 ```js
 // Documented route:
-router.get('/', {description: 'Main route'}, function* () {
+router.get('/', {meta: {description: 'Main route'}}, function* () {
   this.body = 'Hello world';
 });
 
 // Hidden route:
-router.get('/secretRoute', {description: 'Nobody here but us chickens.', hide: true}, function* () {
+router.get('/secretRoute', {meta: {description: 'Nobody here but us chickens.', hide: true}}, function* () {
   this.body = 'This is a hidden world';
 });
 ```
@@ -73,6 +73,8 @@ docs.useRequestHandler(function* (next) {
   this.throw(404);
 });
 ```
+
+For backwards compatibility "hide" and "description" on the koa-joi-router configuration object are still supported but no longer recommended since they pollute the namespace of the configuration.
 
 ## Installation
 ```
