@@ -179,10 +179,11 @@ function describeRoute(route) {
  */
 
 function describeObject(o) {
+  if (!isObject(o)) return o;
+
   if (typeof o.describe === 'function') return o.describe();
 
   var ret = {};
-  if (!isObject(o)) return o;
 
   Object.keys(o).forEach(function(key) {
     ret[key] = describeObject(o[key]);
