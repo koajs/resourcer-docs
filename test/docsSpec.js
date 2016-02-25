@@ -115,6 +115,10 @@ describe('koa-resourcer-docs', function() {
         assert(html.indexOf('Overridden') === -1);
         assert(html.indexOf('commanding') > 0);
       });
+
+      it('should not throw when a validate attribute is undefined', function* () {
+        assert(html.indexOf('/undefinedValidateProp') > 0);
+      });
     });
   });
 

@@ -25,6 +25,20 @@ r.get('/visible',
   }
 );
 
+r.get('/undefinedValidateProp',
+  {
+    meta: {
+      description: 'Route with an undefined validate attribute'
+    },
+    validate: {
+      body: undefined
+    }
+  },
+  function* () {
+    this.body = 'This should not throw an error!';
+  }
+);
+
 r.get('/hidden',
   {
     meta: {
