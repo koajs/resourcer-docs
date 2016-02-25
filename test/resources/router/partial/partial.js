@@ -25,7 +25,7 @@ r.get('/visible',
   }
 );
 
-r.get('/badvalidate',
+r.get('/undefinedValidateProp',
   {
     meta: {
       description: 'Route with an undefined validate attribute'

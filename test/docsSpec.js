@@ -117,7 +117,7 @@ describe('koa-resourcer-docs', function() {
       });
 
       it('should not throw when a validate attribute is undefined', function* () {
-        assert(html.indexOf('/badvalidate') > 0);
+        assert(html.indexOf('/undefinedValidateProp') > 0);
       });
     });
   });
