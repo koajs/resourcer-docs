@@ -1,9 +1,6 @@
-#koa-resourcer-docs
+#resourcer-docs
 
-## Introduction
-A simple documentation generator for [koa-resourcer](https://github.com/pebble/koa-resourcer).
-
-App resources that have exposed routes will be parsed and documented.
+A simple documentation generator for [koa-resourcer](https://github.com/koajs/resourcer).
 
 ## Use
 In your app:
@@ -83,7 +80,7 @@ npm install koa-resourcer-docs --save
 
 ## Sponsored by
 
-[Pebble Technology!](https://getpebble.com)
+[Pebble Technology!](https://www.pebble.com)
 
 ## LICENSE
 

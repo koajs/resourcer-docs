@@ -13,13 +13,13 @@
     "router",
     "documentation"
   ],
-  "homepage": "https://github.com/pebble/koa-resourcer-docs",
+  "homepage": "https://github.com/koajs/resourcer-docs",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pebble/koa-resourcer-docs.git"
+    "url": "https://github.com/koajs/resourcer-docs.git"
   },
   "bugs": {
-    "url": "https://github.com/pebble/koa-resourcer-docs/issues"
+    "url": "https://github.com/koajs/resourcer-docs/issues"
   },
   "engines": {
     "node": ">= 0.12.0",
