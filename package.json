@@ -31,7 +31,8 @@
     "eslint-config-pebble": "^1.2.0",
     "eslint-plugin-standard": "^1.2.0",
     "koa": "^0.21.0",
-    "koa-joi-router": "^2.0.0"
+    "koa-joi-router": "^2.0.0",
+    "snyk": "^1.33.0"
   },
   "devDependencies": {
     "koa-resourcer": "^1.0.0",
@@ -43,7 +44,9 @@
   },
   "scripts": {
     "test": "make test",
-    "test-cov": "make test-cov"
+    "test-cov": "make test-cov",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "eslintConfig": {
     "extends": [
@@ -52,5 +55,6 @@
     "env": {
       "node": true
     }
-  }
+  },
+  "snyk": true
 }
