@@ -31,7 +31,7 @@
     "eslint-config-pebble": "^1.2.0",
     "eslint-plugin-standard": "^1.2.0",
     "koa": "^0.21.0",
-    "koa-joi-router": "^2.0.0"
+    "koa-joi-router": "^4.0.0"
   },
   "devDependencies": {
     "koa-resourcer": "^1.0.0",
